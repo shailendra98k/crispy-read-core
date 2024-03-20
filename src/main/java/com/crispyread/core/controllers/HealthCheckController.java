@@ -13,7 +13,7 @@ public class HealthCheckController {
      * health check endpoint
      * @return String
      */
-    @GetMapping(path = "/health")
+    @GetMapping(path = "/api/health")
     public ResponseEntity<String> healthCheck(){
         return new ResponseEntity<>(Constants.HEALTH_CHECK_OK, HttpStatus.OK);
     }
