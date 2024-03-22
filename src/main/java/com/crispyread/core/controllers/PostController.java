@@ -35,6 +35,19 @@ public class PostController {
         return page.getContent();
     }
 
+    /**
+     * Get multiple posts filtered by category and sorted by SORT and paginated
+     */
+    @GetMapping(path = "/api/posts/{category}")
+    public List<Post> getPostsByCategory(
+            @PathVariable(name = "category") String category,
+            @Nullable @RequestParam(value = "page", defaultValue = "0") Integer pageNumber,
+            @Nullable @RequestParam(value = "size", defaultValue = "10") Integer pageSize,
+            @Nullable @RequestParam(value = "sort", defaultValue = "createdAt:DESC") String sortKey) {
+        Page<Post> page = this.postService.getPostsByCategory(category, Integer.valueOf(pageNumber), Integer.valueOf(pageSize), sortKey);
+        return page.getContent();
+    }
+
 
 
 }

@@ -42,10 +42,33 @@ public class PostService {
         return post;
     }
 
+    /**
+     * Returns multiple posts
+     * @param pageNumber
+     * @param pageSize
+     * @param sortKey
+     * @return
+     */
     public Page<Post> getPosts(Integer pageNumber, Integer pageSize, String sortKey ) {
         String[] sortKeys =  sortKey.split(":");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(sortKeys[1]), sortKeys[0]);
         return postRepository.findAll(pageable);
     }
+
+    /**
+     * Returns multiple post by category
+     * @param category
+     * @param pageNumber
+     * @param pageSize
+     * @param sortKey
+     * @return
+     */
+    public Page<Post> getPostsByCategory(String category, Integer pageNumber, Integer pageSize, String sortKey ) {
+        String[] sortKeys =  sortKey.split(":");
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(sortKeys[1]), sortKeys[0]);
+        return postRepository.findPostsByCategory(category,pageable);
+    }
+
+
 
 }
