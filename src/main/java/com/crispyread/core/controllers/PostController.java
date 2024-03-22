@@ -24,6 +24,16 @@ public class PostController {
     }
 
     /**
+     * Get single post by id and slug
+     */
+    @GetMapping(path = "/api/post/{id}/{slug}")
+    public Post getPostsBySlug(
+            @PathVariable(name = "id") Integer id,
+            @PathVariable(name = "slug") String slug) {
+        return  this.postService.getPostByIdAndSlug(id, slug);
+    }
+
+    /**
      * Get multiple posts sorted by SORT and paginated
      */
     @GetMapping(path = "/api/posts")

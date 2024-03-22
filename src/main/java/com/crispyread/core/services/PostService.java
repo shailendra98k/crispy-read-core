@@ -43,6 +43,16 @@ public class PostService {
     }
 
     /**
+     * Get Post by id and slug
+     * @param id
+     * @param slug
+     * @return
+     */
+    public Post getPostByIdAndSlug(Integer id, String slug ) {
+        return postRepository.findPostByIdAndSlug(id,slug);
+    }
+
+    /**
      * Returns multiple posts
      * @param pageNumber
      * @param pageSize
