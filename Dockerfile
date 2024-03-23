@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN ./mvnw clean package
+RUN ./mvnw clean compile install package
 
 FROM --platform=linux/amd64 openjdk:17-alpine AS runner
 
