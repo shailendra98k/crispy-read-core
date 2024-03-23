@@ -27,7 +27,7 @@ public class PostController {
      * Get single post by id and slug
      */
     @GetMapping(path = "/api/post/{id}/{slug}")
-    public Post getPostsBySlug(
+    public Post getPostByIdAndSlug(
             @PathVariable(name = "id") Integer id,
             @PathVariable(name = "slug") String slug) {
         return  this.postService.getPostByIdAndSlug(id, slug);
@@ -56,6 +56,16 @@ public class PostController {
             @Nullable @RequestParam(value = "sort", defaultValue = "createdAt:DESC") String sortKey) {
         Page<Post> page = this.postService.getPostsByCategory(category, Integer.valueOf(pageNumber), Integer.valueOf(pageSize), sortKey);
         return page.getContent();
+    }
+
+
+    /**
+     * Update post
+     */
+    @PutMapping(path = "/api/post")
+    public Post updatePostByIdAndSlug(
+            @RequestBody Post body) {
+        return  this.postService.updatePost(body);
     }
 
 

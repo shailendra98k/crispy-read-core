@@ -21,8 +21,6 @@ public class PostService {
 
     /**
      * Creates a post object
-     * @param body
-     * @return post
      */
     public Post createPost(Post body) {
         Post post = Post.builder()
@@ -44,9 +42,6 @@ public class PostService {
 
     /**
      * Get Post by id and slug
-     * @param id
-     * @param slug
-     * @return
      */
     public Post getPostByIdAndSlug(Integer id, String slug ) {
         return postRepository.findPostByIdAndSlug(id,slug);
@@ -54,10 +49,6 @@ public class PostService {
 
     /**
      * Returns multiple posts
-     * @param pageNumber
-     * @param pageSize
-     * @param sortKey
-     * @return
      */
     public Page<Post> getPosts(Integer pageNumber, Integer pageSize, String sortKey ) {
         String[] sortKeys =  sortKey.split(":");
@@ -67,11 +58,6 @@ public class PostService {
 
     /**
      * Returns multiple post by category
-     * @param category
-     * @param pageNumber
-     * @param pageSize
-     * @param sortKey
-     * @return
      */
     public Page<Post> getPostsByCategory(String category, Integer pageNumber, Integer pageSize, String sortKey ) {
         String[] sortKeys =  sortKey.split(":");
@@ -79,6 +65,29 @@ public class PostService {
         return postRepository.findPostsByCategory(category,pageable);
     }
 
+    /**
+     * Update post
+     */
+    public Post updatePost (Post body){
+
+        Post post = Post.builder()
+                .id(body.getId())
+                .title(body.getTitle())
+                .category(body.getCategory())
+                .slug(body.getSlug())
+                .content(body.getContent())
+                .coverImage(body.getCoverImage())
+                .seoDescription(body.getSeoDescription())
+                .isFeatured(body.isFeatured())
+                .isEditorPicked(body.isEditorPicked())
+                .isMostPopular(body.isMostPopular())
+                .isPublished(body.isPublished())
+                .createdAt(body.getCreatedAt())
+                .lastModifiedAt(new Date())
+                .build();
+        this.postRepository.save(post);
+        return post;
+    }
 
 
 }
