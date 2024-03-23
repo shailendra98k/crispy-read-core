@@ -43,3 +43,25 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Configure AWS Credentials
+        run: |
+          mkdir ~/.aws
+          touch ~/.aws/credentials
+          echo "[default]" > ~/.aws/credentials
+          echo "region"="ap-south-1" >> ~/.aws/credentials
+          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+
+      - name: Update ECS Task Definition
+        run: |
+          # Using AWS CLI to update the ECS task definition with the new image tag
+          aws ecs register-task-definition --family crispyread-core  --container-definitions '[{"name":"crispyread-core","image":"shailendra98k/crispyread-core:master", "memory":428, "portMappings":[{"hostPort": 8080, "protocol": "tcp", "containerPort":8080}] }]' --region ap-south-1
+
+      - name: Stop ECS Task
+        run: |
+          aws ecs list-tasks --cluster "CrispyRead" --family crispyread-core | jq -r ".taskArns[]" | xargs -n1 aws ecs stop-task --no-cli-pager --cluster "CrispyRead" --task
+
+      - name: Run ECS Task
+        run: |
+          # Using AWS CLI to run the ECS task using the updated task definition
+          aws ecs run-task --cluster CrispyRead --task-definition crispyread-core
