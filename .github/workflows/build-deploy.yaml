@@ -10,12 +10,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Create ENV file
+      - name: Overwrite Application property file
         run: |
-          touch .env
-          echo DB="${{ secrets.DB}}" >> .env
-          echo DB_USER="${{ secrets.DB_USER}}" >> .env
-          echo DB_PASSWORD="${{ secrets.DB_PASSWORD}}" >> .env
+          cd src/main/resources
+          echo spring.datasource.url='jdbc:postgresql://${{secrets.DB}}:5432/crispyRead' > application.properties 
+          echo spring.datasource.username='${{ secrets.DB_USER}}' >> application.properties
+          echo spring.datasource.password='${{ secrets.DB_PASSWORD}}' >> application.properties
+          echo spring.datasource.driver-class-name=org.postgresql.Driver >> application.properties
+          echo spring.jpa.hibernate.ddl-auto=update >> application.properties
 
       - name: Build Docker Image
         run: |
