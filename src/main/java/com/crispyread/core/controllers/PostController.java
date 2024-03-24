@@ -58,6 +58,18 @@ public class PostController {
         return page.getContent();
     }
 
+    /**
+     * Get featured posts
+     */
+    @GetMapping(path = "/api/posts/featured")
+    public List<Post> getFeaturedPosts(
+            @Nullable @RequestParam(value = "page", defaultValue = "0") Integer pageNumber,
+            @Nullable @RequestParam(value = "size", defaultValue = "10") Integer pageSize,
+            @Nullable @RequestParam(value = "sort", defaultValue = "createdAt:DESC") String sortKey) {
+        Page <Post> page =  this.postService.getFeaturedPosts(Integer.valueOf(pageNumber), Integer.valueOf(pageSize), sortKey);
+        return  page.getContent();
+    }
+
 
     /**
      * Update post

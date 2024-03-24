@@ -28,10 +28,12 @@ public class Post {
 
     private String slug;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String coverImage;
 
+    @Column(columnDefinition = "TEXT")
     private String seoDescription;
 
     private boolean isFeatured;

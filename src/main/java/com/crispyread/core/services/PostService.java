@@ -66,6 +66,15 @@ public class PostService {
     }
 
     /**
+     * Returns featured post(s)
+     */
+    public Page<Post> getFeaturedPosts(Integer pageNumber, Integer pageSize, String sortKey ) {
+        String[] sortKeys =  sortKey.split(":");
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(sortKeys[1]), sortKeys[0]);
+        return postRepository.findPostsByIsFeatured(true, pageable);
+    }
+
+    /**
      * Update post
      */
     public Post updatePost (Post body){
