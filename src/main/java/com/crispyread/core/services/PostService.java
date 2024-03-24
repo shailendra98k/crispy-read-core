@@ -58,19 +58,19 @@ public class PostService {
     /**
      * Returns multiple posts
      */
-    public Page<Post> getPosts(Integer pageNumber, Integer pageSize, String sortKey ) {
+    public Page<Post> getPosts(Integer pageNumber, Integer pageSize, Boolean isPublished, String sortKey ) {
         String[] sortKeys =  sortKey.split(":");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(sortKeys[1]), sortKeys[0]);
-        return postRepository.findAll(pageable);
+        return postRepository.findAllPostsByIsPublished(isPublished, pageable);
     }
 
     /**
      * Returns multiple post by category
      */
-    public Page<Post> getPostsByCategory(String category, Integer pageNumber, Integer pageSize, String sortKey ) {
+    public Page<Post> getPostsByCategory(String category, Integer pageNumber, Integer pageSize,Boolean isPublished,  String sortKey ) {
         String[] sortKeys =  sortKey.split(":");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(sortKeys[1]), sortKeys[0]);
-        return postRepository.findPostsByCategory(category,pageable);
+        return postRepository.findPostsByCategoryAndIsPublished(category,isPublished,pageable);
     }
 
     /**
