@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PostRepository extends JpaRepository<Post, Integer> {
     Page<Post> findPostsByCategory(String category, Pageable page);
     Post findPostByIdAndSlug(Integer id, String slug);
+    Post findPostBySlug( String slug);
     Page<Post> findPostsByIsFeatured(boolean isFeatured, Pageable page);
 }

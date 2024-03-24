@@ -47,6 +47,14 @@ public class PostService {
         return postRepository.findPostByIdAndSlug(id,slug);
     }
 
+
+    /**
+     * Get Post by slug
+     */
+    public Post getPostBySlug( String slug ) {
+        return postRepository.findPostBySlug(slug);
+    }
+
     /**
      * Returns multiple posts
      */
