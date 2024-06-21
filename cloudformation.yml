@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The template used to create an crispy-read-core stack e.g., RDS instance
+Parameters:
+  DBPassword:
+    NoEcho: 'true'
+    Description: Password MySQL database access
+    Type: String
+    MinLength: '8'
+    MaxLength: '41'
+    ConstraintDescription: must contain only alphanumeric characters.
+
+Resources:
+  MyDB:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      DBInstanceIdentifier: 'crispy-read'
+      DBName: 'crispyRead'
+      DBInstanceClass: 'db.t3.micro'
+      AllocatedStorage: '20'
+      Engine: 'postgres'
+      MasterUsername: 'postgres'
+      MasterUserPassword: !Ref DBPassword
