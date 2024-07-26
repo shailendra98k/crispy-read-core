@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -20,6 +21,7 @@ jobs:
           echo spring.jpa.hibernate.ddl-auto=update >> application.properties
           echo spring.security.user.name='${{secrets.USER}}' >> application.properties
           echo spring.security.user.password='${{secrets.USER_PASSWORD}}' >> application.properties
+          echo auth.token.cookie='${{secrets.AUTH_TOKEN_COOKIE}}' >> application.properties
 
       - name: Build Docker Image
         run: |
