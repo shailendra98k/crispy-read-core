@@ -61,7 +61,7 @@ jobs:
 
       - name: Stop ECS Task
         run: |
-          aws ecs list-tasks --cluster "CrispyRead" --family crispyread-core | jq -r ".taskArns[]" | xargs -n1 aws ecs stop-task --no-cli-pager --cluster "CrispyRead" --task
+          aws ecs list-tasks --cluster "CrispyRead" --family crispyread-core | jq -r ".taskArns[]" | xargs -r -n1 aws ecs stop-task --no-cli-pager --cluster "CrispyRead" --task
 
       - name: Run ECS Task
         run: |
