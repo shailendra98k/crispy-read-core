@@ -1,0 +1,18 @@
+name : Deploy Core Service
+on:
+  workflow_dispatch:
+jobs:
+  stop-ecs-tasks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        run: |
+          mkdir ~/.aws
+          touch ~/.aws/credentials
+          echo "[default]" > ~/.aws/credentials
+          echo "region"="ap-south-1" >> ~/.aws/credentials
+          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+      - name: Stop ECS Task
+        run: |
+          aws ecs list-tasks --cluster "CrispyRead" --family crispyread-core | jq -r ".taskArns[]" | xargs -r -n1 aws ecs stop-task --no-cli-pager --cluster "CrispyRead" --task
