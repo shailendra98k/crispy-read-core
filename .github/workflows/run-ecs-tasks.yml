@@ -1,0 +1,23 @@
+name : Run ECS tasks
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+jobs:
+  run-ecs-tasks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        run: |
+          mkdir ~/.aws
+          touch ~/.aws/credentials
+          echo "[default]" > ~/.aws/credentials
+          echo "region"="ap-south-1" >> ~/.aws/credentials
+          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+
+      - name: Run ECS Task
+        run: |
+          # Using AWS CLI to run the ECS task using the updated task definition
+          aws ecs run-task --cluster CrispyRead --task-definition crispyread-core
