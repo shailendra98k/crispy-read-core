@@ -1,0 +1,75 @@
+{
+  "title": "Post",
+  "description": "Post response body",
+  "properties": {
+    "id" : {
+      "type": "integer",
+      "description": "Unique identifier of the post",
+      "example": 12
+    },
+    "title" : {
+      "type": "string",
+      "description": "Title of the post",
+      "example": "My First Post"
+    },
+    "category" : {
+      "type": "string",
+      "description": "Category to which the post belongs to",
+      "example": "Automobile"
+    },
+    "slug" : {
+      "type": "string",
+      "description": "Url slug of the post",
+      "example": "my-first-post"
+    },
+    "content" : {
+      "type": "string",
+      "description": "HTML content of the post",
+      "example": "<h1> My First App </h1>"
+    },
+    "coverImage" : {
+      "type": "string",
+      "description": "Cover image of the post",
+      "example": "https://d338715jx9eoa6.cloudfront.net/file-server/media/Screenshot_2024-07-29_at_11.28.39_PM.png",
+      "default" : null
+    },
+    "seoDescription" : {
+      "type": "string",
+      "description": "SEO description for the post",
+      "example": "SEO description",
+      "default" : null
+    },
+    "isPublished": {
+      "type": "boolean",
+      "description": "Tells if the post is published",
+      "default" : false
+    },
+    "isFeatured": {
+      "type": "boolean",
+      "description": "Tells if the post is featured in the carousal",
+      "default" : false
+    },
+    "isEditorPicked": {
+      "type": "boolean",
+      "description": "Tells if the post is tagged as editor picked",
+      "default" : false
+    },
+    "isMostPopular": {
+      "type": "boolean",
+      "description": "Tells if the post is tagged as most popular",
+      "default" : false
+    },
+    "createdAt" : {
+      "type": "string",
+      "format": "datetime",
+      "description": "Date time at which post was created",
+      "example": "2024-07-26T13:57:41.954+00:00"
+    },
+    "lastUpdatedAt" : {
+      "type": "string",
+      "format": "datetime",
+      "description": "Date time at which post was last updated",
+      "example": "2024-07-26T13:57:41.954+00:00"
+    }
+  }
+}

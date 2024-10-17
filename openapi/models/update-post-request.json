@@ -1,0 +1,15 @@
+{
+  "allOf": [
+    {
+      "$ref": "create-post-request.json"
+    }
+  ],
+  "required": ["id"],
+  "properties": {
+    "id" : {
+      "type": "integer",
+      "description": "Unique identifier of the post",
+      "example": 12
+    }
+  }
+}

@@ -1,0 +1,191 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: CrispyRead API Specification
+
+servers:
+  - url: https://crispyread.com
+
+paths:
+  /api/admin/authenticate:
+    get:
+      summary: Authenticate user
+      description: When this endpoint is accessed, the browser prompts the user to authenticate. Once the correct username and password are provided, the user is granted authorization to perform admin tasks such as adding, updating, or archiving posts.
+      operationId: isAdminAuthenticated
+      tags:
+        - Admin Resources
+      responses:
+        200:
+          description: "User gets authenticated"
+        401:
+          description: "Incorrect username/password is used"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2024-10-17T18:41:16.470+00:00"
+                  status:
+                    type: integer
+                    example: 401
+                  error:
+                    type: string
+                    example: "Unauthorized"
+                  path:
+                    type: string
+                    example: "/api/admin/authenticate"
+
+        default:
+          description: "Internal server error"
+
+  /api/health:
+    get:
+      summary: Health Check
+      description: Endpoint to verify the backend service is up and running
+      operationId: healthCheck
+      tags:
+        - HealthCheck Resources
+      responses:
+        200:
+          description: "Service is up and running"
+        default:
+          description: "Internal server error"
+
+
+  /api/post:
+    post:
+      summary: Create Post
+      description: Creates a new post
+      operationId: createPost
+      tags:
+        - Post Resources
+      security:
+        - basicAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/create-post-request'
+      responses:
+        200:
+          description: "Successfully created a new post"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responseBodies/create-post-response'
+        401:
+          description: "User is not authenticated"
+        default:
+          description: "Internal server error"
+
+    put:
+      summary: Update Post
+      description: Update a post by their id
+      operationId: updatePostById
+      tags:
+        - Post Resources
+      security:
+        - basicAuth: [ ]
+      requestBody:
+        $ref: '#/components/requestBodies/update-post-request'
+      responses:
+        200:
+          description: "Successfully updated the post"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responseBodies/update-post-response'
+        401:
+          description: "User is not authenticated"
+        default:
+          description: "Internal server error"
+
+  /api/post/{slug}:
+    get:
+      summary: Get post by slug
+      description: Get a post by slug
+      operationId: getPostBySlug
+      tags:
+        - Post Resources
+      parameters:
+        - $ref: '#/components/parameters/slug'
+      responses:
+        200:
+          description: "Successfully fetched the post"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responseBodies/get-post-response'
+        default:
+          description: "Internal server error"
+
+  /api/post/{id}/{slug}:
+    get:
+      summary: Get post by id & slug
+      description: Get a post by id and slug
+      operationId: getPostByIdAndSlug
+      tags :
+        - Post Resources
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/slug'
+      responses:
+        200:
+          description: "Successfully fetched the post"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responseBodies/get-post-response'
+        default:
+          description: "Internal server error"
+
+
+
+
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier of the post.
+      schema:
+        type: integer
+        example: 123
+    slug:
+      name: slug
+      in: path
+      required: true
+      description: URL friendly slug of the post.
+      schema:
+        type: string
+        example: some-awesome-post
+
+  responseBodies:
+    unauthorized:
+      $ref: './models/unauthorized.json'
+    create-post-response:
+      $ref: './models/post-response.json'
+    update-post-response:
+      $ref: './models/post-response.json'
+    get-post-response:
+      $ref: './models/post-response.json'
+
+  requestBodies:
+    create-post-request:
+      description: "Request body to create a new post"
+      content:
+        application/json:
+          schema:
+            $ref: './models/create-post-request.json'
+    update-post-request:
+      description: "Request body to update an existing post by their id"
+      content:
+        application/json:
+          schema:
+            $ref: './models/update-post-request.json'
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
