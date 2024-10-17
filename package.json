@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx @redocly/cli build-docs openapi.yaml --output src/main/resources/public/index.html"
+    "build": "npx @redocly/cli build-docs openapi.yaml --output src/main/resources/public/api/index.html"
   },
   "keywords": [],
   "author": "",
