@@ -1,0 +1,15 @@
+{
+  "name": "crispy-read-core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx @redocly/cli build-docs openapi.yaml --output src/main/resources/public/index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "redoc-cli": "^0.13.21"
+  }
+}
