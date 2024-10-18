@@ -1,6 +1,7 @@
 package com.crispyread.core.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,16 +23,16 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotBlank(message = "Title cannot be null or empty")
     private String title;
 
-    @NotNull
+    @NotBlank(message = "Category cannot be null or empty")
     private String category;
 
-    @NotNull
+    @NotBlank(message = "Slug cannot be null or empty")
     private String slug;
 
-    @NotNull
+    @NotBlank(message = "Content cannot be null or empty")
     @Column(columnDefinition = "TEXT")
     private String content;
 
