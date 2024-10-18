@@ -1,11 +1,11 @@
 package com.crispyread.core.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
@@ -22,12 +22,16 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String title;
 
+    @NotNull
     private String category;
 
+    @NotNull
     private String slug;
 
+    @NotNull
     @Column(columnDefinition = "TEXT")
     private String content;
 

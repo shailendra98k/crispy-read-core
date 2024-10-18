@@ -3,6 +3,7 @@ package com.crispyread.core.controllers;
 import com.crispyread.core.entities.Post;
 import com.crispyread.core.services.PostService;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class PostController {
      * Creates Post
      */
     @PostMapping(path = "/api/post")
-    public Post createPost(@RequestBody Post body){
+    public Post createPost(@RequestBody @Valid Post body){
         return this.postService.createPost(body);
     }
 
@@ -87,7 +88,7 @@ public class PostController {
      */
     @PutMapping(path = "/api/post")
     public Post updatePostByIdAndSlug(
-            @RequestBody Post body) {
+            @RequestBody @Valid Post body) {
         return  this.postService.updatePost(body);
     }
 
