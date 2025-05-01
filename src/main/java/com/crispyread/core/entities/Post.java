@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "spring_posts")
+@Table(name = "posts")
 public class Post {
 
     @Id

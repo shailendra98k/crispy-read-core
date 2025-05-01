@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment;
 import static com.crispyread.core.constants.Constants.AUTH_TOKEN_COOKIE;
 
 @RestController
+@Deprecated
 public class AdminController {
     @Autowired Environment env;
     @GetMapping(path = "/api/admin/authenticate")

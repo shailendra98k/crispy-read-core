@@ -2,22 +2,18 @@ package com.crispyread.core.services;
 
 import com.crispyread.core.entities.Post;
 import com.crispyread.core.repository.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Array;
+import org.springframework.stereotype.Service;
 import java.util.Date;
-import java.util.List;
 
-@Component
+@Service
 public class PostService {
+    @Autowired
     private PostRepository postRepository;
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
 
     /**
      * Creates a post object
