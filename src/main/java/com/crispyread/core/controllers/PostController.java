@@ -25,6 +25,15 @@ public class PostController {
     }
 
     /**
+     * Update post
+     */
+    @PutMapping(path = "/api/post")
+    public Post updatePostByIdAndSlug(
+            @RequestBody @Valid Post body) {
+        return  this.postService.updatePost(body);
+    }
+
+    /**
      * Get single post by id and slug
      */
     @GetMapping(path = "/api/post/{id}/{slug}")
@@ -81,17 +90,4 @@ public class PostController {
         Page <Post> page =  this.postService.getFeaturedPosts(Integer.valueOf(pageNumber), Integer.valueOf(pageSize), sortKey);
         return  page.getContent();
     }
-
-
-    /**
-     * Update post
-     */
-    @PutMapping(path = "/api/post")
-    public Post updatePostByIdAndSlug(
-            @RequestBody @Valid Post body) {
-        return  this.postService.updatePost(body);
-    }
-
-
-
 }
