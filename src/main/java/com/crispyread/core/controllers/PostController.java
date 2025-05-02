@@ -1,11 +1,16 @@
 package com.crispyread.core.controllers;
 
+import com.crispyread.core.dto.ErrorDetails;
 import com.crispyread.core.entities.Post;
 import com.crispyread.core.services.PostService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +26,32 @@ public class PostController {
      */
     @PostMapping(path = "/api/post")
     public Post createPost(@RequestBody @Valid Post body){
-        return this.postService.createPost(body);
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User user =
+                (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+
+        return this.postService.createPost(body, user.getUsername());
+    }
+
+
+    @PostMapping(path = "/api/posts/{action}")
+    public ResponseEntity<?> publishPost(@RequestBody @Valid List<Integer> ids,
+                                                  @PathVariable(name = "action") String action) {
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User user =
+                (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+
+        if (action.equals("publish")) {
+            return ResponseEntity.ok(postService.publishPosts(ids, user.getUsername()));
+        }
+        if (action.equals("hide")) {
+            return ResponseEntity.ok(postService.hidePosts(ids, user.getUsername()));
+        }
+        return ResponseEntity.badRequest().body(ErrorDetails.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorMessage("Invalid action provided")
+                .build());
+
     }
 
     /**

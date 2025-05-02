@@ -1,27 +1,38 @@
 package com.crispyread.core.services;
 
 import com.crispyread.core.entities.Post;
+import com.crispyread.core.entities.User;
 import com.crispyread.core.repository.PostRepository;
+import com.crispyread.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      * Creates a post object
      */
-    public Post createPost(Post body) {
+    public Post createPost(Post body, String username) {
+
+        User user = userRepository.findByUsernameOrEmail(username, null);
         Post post = Post.builder()
                 .title(body.getTitle())
                 .category(body.getCategory())
+                .author(user)
                 .slug(body.getSlug())
                 .content(body.getContent())
                 .coverImage(body.getCoverImage())
@@ -87,6 +98,7 @@ public class PostService {
                 .id(body.getId())
                 .title(body.getTitle())
                 .category(body.getCategory())
+                .author(body.getAuthor())
                 .slug(body.getSlug())
                 .content(body.getContent())
                 .coverImage(body.getCoverImage())
@@ -103,4 +115,35 @@ public class PostService {
     }
 
 
+    public List<Post> publishPosts(List<Integer> ids, String username) {
+
+        User author = userRepository.findByUsernameOrEmail(username, null);
+        List<Post> posts = new ArrayList<>();
+        ids.forEach(id -> {
+            Post post = postRepository.findPostByIdAndAuthor(id, author);
+            if (post != null) {
+                post.setPublished(true);
+                post.setLastModifiedAt(new Date());
+                postRepository.save(post);
+                posts.add(post);
+            }
+        });
+        return posts;
+    }
+
+    public List<Post> hidePosts(List<Integer> ids, String username) {
+
+        User author = userRepository.findByUsernameOrEmail(username, null);
+        List<Post> posts = new ArrayList<>();
+        ids.forEach(id -> {
+            Post post = postRepository.findPostByIdAndAuthor(id, author);
+            if (post != null) {
+                post.setPublished(false);
+                post.setLastModifiedAt(new Date());
+                postRepository.save(post);
+                posts.add(post);
+            }
+        });
+        return posts;
+    }
 }
