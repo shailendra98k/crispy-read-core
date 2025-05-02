@@ -23,6 +23,10 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "username", name = "author")
+    private User author;
+
     @NotBlank(message = "Title cannot be null or empty")
     private String title;
 
