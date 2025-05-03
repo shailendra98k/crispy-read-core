@@ -1,7 +1,10 @@
 package com.crispyread.core.services;
 
+import com.crispyread.core.dto.CreatePostRequest;
+import com.crispyread.core.entities.Category;
 import com.crispyread.core.entities.Post;
 import com.crispyread.core.entities.User;
+import com.crispyread.core.repository.CategoryRepository;
 import com.crispyread.core.repository.PostRepository;
 import com.crispyread.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,24 +26,29 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     /**
      * Creates a post object
      */
-    public Post createPost(Post body, String username) {
+    public Post createPost(CreatePostRequest body, String username) {
 
         User user = userRepository.findByUsernameOrEmail(username, null);
+        Category category = categoryRepository.findCategoryByName(body.getCategory());
+        String slug = body.getTitle().toLowerCase().replaceAll(" ", "-");
         Post post = Post.builder()
                 .title(body.getTitle())
-                .category(body.getCategory())
+                .category(category)
                 .author(user)
-                .slug(body.getSlug())
+                .slug(slug)
                 .content(body.getContent())
                 .coverImage(body.getCoverImage())
                 .seoDescription(body.getSeoDescription())
-                .isFeatured(body.isFeatured())
-                .isEditorPicked(body.isEditorPicked())
-                .isMostPopular(body.isMostPopular())
-                .isPublished(body.isPublished())
+                .isFeatured(false)
+                .isEditorPicked(false)
+                .isMostPopular(false)
+                .isPublished(false)
                 .createdAt(new Date())
                 .build();
         this.postRepository.save(post);

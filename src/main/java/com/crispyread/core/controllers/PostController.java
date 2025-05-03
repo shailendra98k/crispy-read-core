@@ -1,5 +1,6 @@
 package com.crispyread.core.controllers;
 
+import com.crispyread.core.dto.CreatePostRequest;
 import com.crispyread.core.dto.ErrorDetails;
 import com.crispyread.core.entities.Post;
 import com.crispyread.core.services.PostService;
@@ -25,7 +26,7 @@ public class PostController {
      * Creates Post
      */
     @PostMapping(path = "/api/post")
-    public Post createPost(@RequestBody @Valid Post body){
+    public Post createPost(@RequestBody @Valid CreatePostRequest body){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) auth.getPrincipal();

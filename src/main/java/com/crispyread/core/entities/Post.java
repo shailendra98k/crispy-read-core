@@ -30,8 +30,9 @@ public class Post {
     @NotBlank(message = "Title cannot be null or empty")
     private String title;
 
-    @NotBlank(message = "Category cannot be null or empty")
-    private String category;
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "name", name = "category")
+    private Category category;
 
     @NotBlank(message = "Slug cannot be null or empty")
     private String slug;
