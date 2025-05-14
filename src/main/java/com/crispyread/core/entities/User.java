@@ -28,7 +28,7 @@ public class User {
     private String username;
 
     @NotBlank(message = "Password cannot be null or empty")
-    private String password;
+    private volatile String password;
 
     @NotBlank(message = "First name cannot be null or empty")
     private String firstName;

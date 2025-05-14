@@ -64,15 +64,12 @@ public class UserController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("jwtToken", jwtToken);
+            headers.add("Set-Cookie", "jwtToken=" + jwtToken + "; HttpOnly; Path=/; SameSite=Strict");
 
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .headers(headers)
-                    .body(ResponseDetails.builder()
-                            .status(HttpStatus.OK)
-                            .message("User with username: " + userDetails.getUsername() + " logged in successfully")
-                            .build()
-                    );
+                    .body(userService.getUser(userLoginRequest.getUsername()));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -85,7 +82,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getUserDetails(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> getUserDetails() {
         try {
             Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
             org.springframework.security.core.userdetails.User user =

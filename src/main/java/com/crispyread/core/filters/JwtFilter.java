@@ -34,8 +34,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
             if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
                 jwt = authorizationHeader.substring(7);
-                username = JwtUtil.extractUsername(jwt);
             }
+            final String cookieHeader = request.getHeader("Cookie");
+            System.out.println("Cookie Header: " + cookieHeader);
+            if (jwt == null && cookieHeader != null && cookieHeader.contains("jwtToken=")) {
+                int startIndex = cookieHeader.indexOf("jwtToken=") + 9;
+                int endIndex = cookieHeader.indexOf(";", startIndex);
+                jwt = (endIndex > 0) ? cookieHeader.substring(startIndex, endIndex) : cookieHeader.substring(startIndex);
+            }
+
+            username = JwtUtil.extractUsername(jwt);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
