@@ -26,26 +26,32 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        final String authorizationHeader = request.getHeader(AUTHORIZATION);
+        try {
+            final String authorizationHeader = request.getHeader(AUTHORIZATION);
 
-        String username = null;
-        String jwt = null;
+            String username = null;
+            String jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
-            jwt = authorizationHeader.substring(7);
-            username = JwtUtil.extractUsername(jwt);
-        }
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-            if (JwtUtil.validateToken(jwt)) {
-                var authentication = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
+                jwt = authorizationHeader.substring(7);
+                username = JwtUtil.extractUsername(jwt);
             }
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+                if (JwtUtil.validateToken(jwt)) {
+                    var authentication = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("JWT Filter Exception: " + e.getMessage());
+        } finally {
+            chain.doFilter(request, response);
         }
-        chain.doFilter(request, response);
     }
 }

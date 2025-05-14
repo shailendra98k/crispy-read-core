@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers( "/api/health", "/api/user/sign-up", "/api/user/login", "/api/index.html").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/posts/**", "/api/post/**").permitAll() // Allow GET requests to posts
+                .requestMatchers(HttpMethod.GET, "/api/posts/**", "/api/post/**", "/api/categories").permitAll() // Allow GET requests to posts
                 .requestMatchers("/api/admin/**").hasRole(String.valueOf(Role.ADMIN))
                 .anyRequest().authenticated() // Secure other endpoints
                 .and()

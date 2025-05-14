@@ -85,7 +85,7 @@ public class PostService {
     public Page<Post> getPostsByCategory(String category, Integer pageNumber, Integer pageSize,Boolean isPublished,  String sortKey ) {
         String[] sortKeys =  sortKey.split(":");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(sortKeys[1]), sortKeys[0]);
-        return postRepository.findPostsByCategoryAndIsPublished(category,isPublished,pageable);
+        return postRepository.findPostsByCategoryAndIsPublished(Category.builder().name(category).build(),isPublished,pageable);
     }
 
     /**
