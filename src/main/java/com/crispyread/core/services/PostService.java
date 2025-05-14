@@ -71,6 +71,13 @@ public class PostService {
     }
 
     /**
+     * Get Post by slug
+     */
+    public Post getPostById( Integer id ) {
+        return postRepository.findPostById(id);
+    }
+
+    /**
      * Returns multiple posts
      */
     public Page<Post> getPosts(Integer pageNumber, Integer pageSize, Boolean isPublished, String sortKey ) {

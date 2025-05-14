@@ -71,7 +71,7 @@ public class PostController {
     public Post getPostByIdAndSlug(
             @PathVariable(name = "id") Integer id,
             @PathVariable(name = "slug") String slug) {
-        return  this.postService.getPostByIdAndSlug(id, slug);
+        return  this.postService.getPostById(id);
     }
 
     /**
