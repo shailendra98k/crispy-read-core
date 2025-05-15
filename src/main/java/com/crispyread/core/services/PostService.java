@@ -1,6 +1,7 @@
 package com.crispyread.core.services;
 
 import com.crispyread.core.dto.CreatePostRequest;
+import com.crispyread.core.dto.UpdatePostRequest;
 import com.crispyread.core.entities.Category;
 import com.crispyread.core.entities.Post;
 import com.crispyread.core.entities.User;
@@ -107,26 +108,32 @@ public class PostService {
     /**
      * Update post
      */
-    public Post updatePost (Post body){
+    public Post updatePost (UpdatePostRequest body, String username) {
 
-        Post post = Post.builder()
-                .id(body.getId())
+        Post existingPost = postRepository.findPostById(body.getId());
+        User user = userRepository.findByUsernameOrEmail(username, null);
+        Category category = categoryRepository.findCategoryByName(body.getCategory());
+        if (existingPost == null || user == null || category == null) {
+            return null;
+        }
+        Post updatedPost = Post.builder()
+                .id(existingPost.getId())
                 .title(body.getTitle())
-                .category(body.getCategory())
-                .author(body.getAuthor())
-                .slug(body.getSlug())
+                .slug(body.getTitle().toLowerCase().replaceAll(" ", "-"))
                 .content(body.getContent())
+                .category(category)
                 .coverImage(body.getCoverImage())
                 .seoDescription(body.getSeoDescription())
-                .isFeatured(body.isFeatured())
-                .isEditorPicked(body.isEditorPicked())
-                .isMostPopular(body.isMostPopular())
-                .isPublished(body.isPublished())
-                .createdAt(body.getCreatedAt())
+                .isFeatured(existingPost.isFeatured())
+                .isEditorPicked(existingPost.isEditorPicked())
+                .isMostPopular(existingPost.isMostPopular())
+                .isPublished(existingPost.isPublished())
+                .createdAt(existingPost.getCreatedAt())
                 .lastModifiedAt(new Date())
+                .author(user)
                 .build();
-        this.postRepository.save(post);
-        return post;
+        this.postRepository.save(updatedPost);
+        return updatedPost;
     }
 
 

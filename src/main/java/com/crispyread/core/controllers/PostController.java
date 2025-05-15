@@ -2,6 +2,7 @@ package com.crispyread.core.controllers;
 
 import com.crispyread.core.dto.CreatePostRequest;
 import com.crispyread.core.dto.ErrorDetails;
+import com.crispyread.core.dto.UpdatePostRequest;
 import com.crispyread.core.entities.Post;
 import com.crispyread.core.services.PostService;
 import jakarta.annotation.Nullable;
@@ -59,9 +60,12 @@ public class PostController {
      * Update post
      */
     @PutMapping(path = "/api/post")
-    public Post updatePostByIdAndSlug(
-            @RequestBody @Valid Post body) {
-        return  this.postService.updatePost(body);
+    public Post updatePost(
+            @RequestBody @Valid UpdatePostRequest body) {
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User user =
+                (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+        return  this.postService.updatePost(body, user.getUsername());
     }
 
     /**
