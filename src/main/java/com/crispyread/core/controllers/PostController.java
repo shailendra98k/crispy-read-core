@@ -2,6 +2,7 @@ package com.crispyread.core.controllers;
 
 import com.crispyread.core.dto.CreatePostRequest;
 import com.crispyread.core.dto.ErrorDetails;
+import com.crispyread.core.dto.PostsResponse;
 import com.crispyread.core.dto.UpdatePostRequest;
 import com.crispyread.core.entities.Post;
 import com.crispyread.core.services.PostService;
@@ -91,27 +92,25 @@ public class PostController {
      * Get multiple posts sorted by SORT and paginated
      */
     @GetMapping(path = "/api/posts")
-    public List<Post> getPosts(
+    public PostsResponse getPosts(
             @Nullable @RequestParam(value = "page", defaultValue = "0") Integer pageNumber,
             @Nullable @RequestParam(value = "size", defaultValue = "10") Integer pageSize,
             @Nullable @RequestParam(value = "isPublished", defaultValue = "true") Boolean isPublished,
             @Nullable @RequestParam(value = "sort", defaultValue = "createdAt:DESC") String sortKey) {
-        Page<Post> page = this.postService.getPosts(Integer.valueOf(pageNumber), Integer.valueOf(pageSize), isPublished,  sortKey);
-        return page.getContent();
+        return this.postService.getPosts(Integer.valueOf(pageNumber), Integer.valueOf(pageSize), isPublished,  sortKey);
     }
 
     /**
      * Get multiple posts filtered by category and sorted by SORT and paginated
      */
     @GetMapping(path = "/api/posts/{category}")
-    public List<Post> getPostsByCategory(
+    public PostsResponse getPostsByCategory(
             @PathVariable(name = "category") String category,
             @Nullable @RequestParam(value = "page", defaultValue = "0") Integer pageNumber,
             @Nullable @RequestParam(value = "size", defaultValue = "10") Integer pageSize,
             @Nullable @RequestParam(value = "isPublished", defaultValue = "true") Boolean isPublished,
             @Nullable @RequestParam(value = "sort", defaultValue = "createdAt:DESC") String sortKey) {
-        Page<Post> page = this.postService.getPostsByCategory(category, Integer.valueOf(pageNumber), Integer.valueOf(pageSize), isPublished, sortKey);
-        return page.getContent();
+        return this.postService.getPostsByCategory(category, Integer.valueOf(pageNumber), Integer.valueOf(pageSize), isPublished, sortKey);
     }
 
     /**

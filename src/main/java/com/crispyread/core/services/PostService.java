@@ -1,6 +1,7 @@
 package com.crispyread.core.services;
 
 import com.crispyread.core.dto.CreatePostRequest;
+import com.crispyread.core.dto.PostsResponse;
 import com.crispyread.core.dto.UpdatePostRequest;
 import com.crispyread.core.entities.Category;
 import com.crispyread.core.entities.Post;
@@ -81,19 +82,23 @@ public class PostService {
     /**
      * Returns multiple posts
      */
-    public Page<Post> getPosts(Integer pageNumber, Integer pageSize, Boolean isPublished, String sortKey ) {
+    public PostsResponse getPosts(Integer pageNumber, Integer pageSize, Boolean isPublished, String sortKey ) {
         String[] sortKeys =  sortKey.split(":");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(sortKeys[1]), sortKeys[0]);
-        return postRepository.findAllPostsByIsPublished(isPublished, pageable);
+        Page<Post> posts =  postRepository.findPostsByIsPublished(isPublished, pageable);
+        int totalPublishedPost = postRepository.countByIsPublished(isPublished);
+        return PostsResponse.builder().totalPublishedPosts(totalPublishedPost).posts(posts.getContent()).build();
     }
 
     /**
      * Returns multiple post by category
      */
-    public Page<Post> getPostsByCategory(String category, Integer pageNumber, Integer pageSize,Boolean isPublished,  String sortKey ) {
+    public PostsResponse getPostsByCategory(String category, Integer pageNumber, Integer pageSize,Boolean isPublished,  String sortKey ) {
         String[] sortKeys =  sortKey.split(":");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(sortKeys[1]), sortKeys[0]);
-        return postRepository.findPostsByCategoryAndIsPublished(Category.builder().name(category).build(),isPublished,pageable);
+        Page<Post> posts =  postRepository.findPostsByCategoryAndIsPublished( Category.builder().name(category).build(), isPublished, pageable);
+        int totalPublishedPost = postRepository.countByIsPublishedAndCategory(isPublished, Category.builder().name(category).build());
+        return PostsResponse.builder().totalPublishedPosts(totalPublishedPost).posts(posts.getContent()).build();
     }
 
     /**
