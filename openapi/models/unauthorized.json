@@ -1,15 +1,20 @@
 {
+  "title": "abc",
   "type": "object",
+  "description": "Post response body",
   "properties": {
-    "code" : {
-      "type": "integer",
-      "description": "HTTP status code",
-      "example": "401"
-    },
-    "message" : {
+    "status" : {
       "type": "string",
-      "description": "Error message",
-      "example": "Unauthorized"
+      "format": "httpStatus",
+      "example": "UNAUTHORIZED"
+    },
+    "errorMessage" : {
+      "type": "string",
+      "example": "Authentication token is missing or invalid"
+    },
+    "errorDetails" : {
+      "type": "object",
+      "example": null
     }
   }
 }

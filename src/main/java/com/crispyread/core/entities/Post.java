@@ -1,11 +1,12 @@
 package com.crispyread.core.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
@@ -15,19 +16,28 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "spring_posts")
+@Table(name = "posts")
 public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "username", name = "author")
+    private User author;
+
+    @NotBlank(message = "Title cannot be null or empty")
     private String title;
 
-    private String category;
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "name", name = "category")
+    private Category category;
 
+    @NotBlank(message = "Slug cannot be null or empty")
     private String slug;
 
+    @NotBlank(message = "Content cannot be null or empty")
     @Column(columnDefinition = "TEXT")
     private String content;
 

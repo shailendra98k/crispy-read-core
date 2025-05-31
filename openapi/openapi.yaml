@@ -18,25 +18,7 @@ paths:
         200:
           description: "User gets authenticated"
         401:
-          description: "Incorrect username/password is used"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  timestamp:
-                    type: string
-                    format: date-time
-                    example: "2024-10-17T18:41:16.470+00:00"
-                  status:
-                    type: integer
-                    example: 401
-                  error:
-                    type: string
-                    example: "Unauthorized"
-                  path:
-                    type: string
-                    example: "/api/admin/authenticate"
+          $ref: '#/components/responseBodies/unauthorized'
 
         default:
           description: "Internal server error"
@@ -74,7 +56,7 @@ paths:
               schema:
                 $ref: '#/components/responseBodies/create-post-response'
         401:
-          description: "User is not authenticated"
+          $ref: '#/components/responseBodies/unauthorized'
         default:
           description: "Internal server error"
 
@@ -96,7 +78,7 @@ paths:
               schema:
                 $ref: '#/components/responseBodies/update-post-response'
         401:
-          description: "User is not authenticated"
+          $ref: '#/components/responseBodies/unauthorized'
         default:
           description: "Internal server error"
 
@@ -163,7 +145,11 @@ components:
 
   responseBodies:
     unauthorized:
-      $ref: './models/unauthorized.json'
+      description: "User is not authorized"
+      content:
+        application/json:
+          schema:
+            $ref: './models/unauthorized.json'
     create-post-response:
       $ref: './models/post-response.json'
     update-post-response:
